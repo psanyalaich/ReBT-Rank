@@ -10,12 +10,6 @@ emits a ranking score, a calibrated probability, a target–decoy q-value, and a
 human-readable rationale — turning an unranked hypothesis cloud into a short,
 statistically interpretable shortlist.
 
-## Status
-
-Pre-alpha. The package is being built module-by-module (M0–M7). This is the
-initial scaffold (Task A1): a `pip`-installable package exposing the `rebt-rank`
-console script.
-
 ## Install (development)
 
 ```bash

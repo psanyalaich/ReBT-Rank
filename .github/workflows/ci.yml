@@ -1,0 +1,57 @@
+# Continuous integration for ReBT-Rank (Task A3): lint + type + test.
+# The Docker build stage is added by Task A4.
+#
+# Tool versions are intentionally pinned for reproducibility:
+#   - lint/type run through pre-commit, whose hook revisions are pinned in
+#     .pre-commit-config.yaml (ruff, black, mypy, nbstripout, hygiene hooks);
+#   - pytest and pre-commit are installed at fixed versions below.
+# GitHub Actions are pinned to their reviewed major-version tags.
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+# Cancel superseded runs on the same ref.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  lint-type:
+    name: Lint & type-check (pre-commit)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Cache pre-commit environments
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pre-commit
+          key: pre-commit-${{ runner.os }}-py311-${{ hashFiles('.pre-commit-config.yaml') }}
+      - name: Install pre-commit
+        run: python -m pip install "pre-commit==4.6.0"
+      - name: Run all hooks
+        run: pre-commit run --all-files --show-diff-on-failure
+
+  test:
+    name: Tests (pytest)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install package and pytest
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e .
+          python -m pip install "pytest==9.1.1"
+      - name: Run tests
+        run: python -m pytest

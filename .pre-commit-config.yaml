@@ -1,0 +1,37 @@
+# Pre-commit hooks for ReBT-Rank (Task A2).
+#
+# Tools run in pre-commit's own isolated environments, so a developer only needs
+# `pre-commit` installed (see `make install-dev`). Per-tool configuration lives in
+# standalone files (ruff.toml, mypy.ini) and black's defaults, so the frozen
+# Task A1 pyproject.toml is left untouched.
+minimum_pre_commit_version: "3.5.0"
+
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: check-yaml
+      - id: check-toml
+      - id: check-merge-conflict
+
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.15.21
+    hooks:
+      - id: ruff
+        args: [--fix]
+
+  - repo: https://github.com/psf/black-pre-commit-mirror
+    rev: 26.5.1
+    hooks:
+      - id: black
+
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v2.3.0
+    hooks:
+      - id: mypy
+        additional_dependencies: ["typer>=0.12"]
+
+  - repo: https://github.com/kynan/nbstripout
+    rev: 0.9.1
+    hooks:
+      - id: nbstripout

@@ -1,0 +1,33 @@
+# Keep the Docker/Apptainer build context small and deterministic. The container
+# only needs pyproject.toml, README.md, LICENSE, and src/ (see Dockerfile).
+.git/
+.github/
+.venv/
+venv/
+env/
+
+# Local docs (large PDF) and dev-only trees are not needed in the image.
+docs/
+notebooks/
+tests/
+
+# Generated / runtime artifacts.
+data/
+models/
+runs/
+reports/
+figures/
+
+# Caches and build leftovers.
+**/__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Dev tooling not required at image build time.
+.pre-commit-config.yaml
+Makefile
+ruff.toml
+mypy.ini

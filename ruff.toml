@@ -1,0 +1,14 @@
+# Ruff configuration for ReBT-Rank (Task A2).
+# Kept in a standalone file so the frozen Task A1 pyproject.toml is untouched.
+target-version = "py311"
+line-length = 88
+src = ["src"]
+
+[lint]
+# E/W: pycodestyle, F: pyflakes, I: isort, UP: pyupgrade.
+# Bugbear (B) is intentionally omitted for now: Typer's `x = typer.Option(...)`
+# default-argument pattern trips B008, and the CLI relies on it heavily.
+select = ["E", "F", "I", "W", "UP"]
+
+[lint.isort]
+known-first-party = ["rebt_rank"]

@@ -1,0 +1,48 @@
+# Apptainer (Singularity) image definition for ReBT-Rank (Task A4).
+#
+# Kept in parity with the Dockerfile: same pinned base image and same install
+# steps. Option A (approved): the package is installed from pyproject.toml, and
+# the definition is structured so a lockfile-pinned install can be dropped in
+# later WITHOUT redesign (see %post).
+#
+# TECHNICAL DEBT (must be resolved before the first public release):
+#   The environment is NOT yet pinned to a lockfile; dependencies are resolved
+#   from pyproject.toml at build time. When an explicit lockfile task lands,
+#   install from the lockfile in %post and use `pip install --no-deps .`.
+
+Bootstrap: docker
+From: python:3.11.9-slim-bookworm
+
+%labels
+    org.opencontainers.image.title ReBT-Rank
+    org.opencontainers.image.description Calibrated, FDR-controlled re-ranking of reverse-biotransformation-derived metabolite-gene hypotheses.
+    org.opencontainers.image.licenses MIT
+    org.opencontainers.image.source https://github.com/psanyalaich/ReBT-Rank
+
+%files
+    pyproject.toml /opt/rebt-rank/pyproject.toml
+    README.md /opt/rebt-rank/README.md
+    LICENSE /opt/rebt-rank/LICENSE
+    src /opt/rebt-rank/src
+
+%environment
+    export PYTHONUNBUFFERED=1
+    export PYTHONDONTWRITEBYTECODE=1
+
+%post
+    set -eux
+    # Future lockfile hook (DO NOT enable until a lockfile actually exists):
+    #     cd /opt/rebt-rank
+    #     pip install --no-cache-dir --require-hashes -r requirements.lock
+    #     pip install --no-cache-dir --no-deps .
+    export PIP_NO_CACHE_DIR=1
+    export PIP_DISABLE_PIP_VERSION_CHECK=1
+    export PIP_ROOT_USER_ACTION=ignore
+    cd /opt/rebt-rank
+    pip install .
+
+%runscript
+    exec rebt-rank "$@"
+
+%test
+    rebt-rank --version
