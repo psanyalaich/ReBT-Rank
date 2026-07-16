@@ -1,0 +1,45 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "rebt-rank"
+description = "Benchmarked, confidence-calibrated, false-discovery-controlled re-ranking of reverse-biotransformation-derived metabolite-gene hypotheses."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [{ name = "Palok Aich" }]
+keywords = [
+    "metabolomics",
+    "reverse-biotransformation",
+    "learning-to-rank",
+    "calibration",
+    "false-discovery-rate",
+    "bioinformatics",
+]
+classifiers = [
+    "Development Status :: 2 - Pre-Alpha",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Bio-Informatics",
+]
+dynamic = ["version"]
+
+# Task A1 installs only what the CLI entry-point stub needs. Scientific and
+# ML dependencies (RDKit, LightGBM, pandas, pandera, equilibrator-api, ...) are
+# added by the tasks that introduce them, per the frozen task graph.
+dependencies = [
+    "typer>=0.12",
+]
+
+[project.scripts]
+rebt-rank = "rebt_rank.cli:main"
+
+[tool.setuptools.dynamic]
+version = { attr = "rebt_rank.__version__" }
+
+[tool.setuptools.packages.find]
+where = ["src"]
