@@ -29,7 +29,13 @@ repos:
     rev: v2.3.0
     hooks:
       - id: mypy
-        additional_dependencies: ["typer>=0.12"]
+        additional_dependencies:
+          - "typer>=0.12"
+          - "pydantic>=2.11,<3"
+          - "pandas>=2.2,<3"
+          - "pandera>=0.22,<1"
+          - "structlog>=24,<27"
+          - "rich>=13"
 
   - repo: https://github.com/kynan/nbstripout
     rev: 0.9.1

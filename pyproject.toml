@@ -33,6 +33,13 @@ dynamic = ["version"]
 # added by the tasks that introduce them, per the frozen task graph.
 dependencies = [
     "typer>=0.12",
+    "pydantic>=2.11,<3",
+    "pandas>=2.2,<3",
+    "pyarrow>=17",
+    "pandera>=0.22,<1",
+    "structlog>=24,<27",
+    "rich>=13",
+    "numpy>=1.26",
 ]
 
 [project.scripts]
