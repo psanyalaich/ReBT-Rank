@@ -1,0 +1,8 @@
+# ReBT-Rank headline run (Engineering Design Part 5.1).
+extends: [base, data]
+experiment:
+  id: main
+  tags: [headline]
+model:
+  objective: lambdarank
+  num_leaves: 63

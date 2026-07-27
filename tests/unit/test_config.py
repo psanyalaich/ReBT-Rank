@@ -89,6 +89,40 @@ def test_empty_subconfig_rejects_extra_keys() -> None:
     raise AssertionError("empty sub-config should reject extra keys")
 
 
+# --- DataConfig / SnapshotConfig (M0b) ---------------------------------------
+
+
+def test_data_config_snapshots_default_empty() -> None:
+    cfg = Config(**_valid_config_dict())
+    assert cfg.data.snapshots == {}
+
+
+def test_data_config_accepts_snapshots() -> None:
+    data = _valid_config_dict()
+    data["data"] = {
+        "snapshots": {
+            "rhea": {"version": "2024_01", "sha256": "abc123", "path": "/snap/rhea"}
+        }
+    }
+    cfg = Config(**data)
+    snap = cfg.data.snapshots["rhea"]
+    assert snap.version == "2024_01"
+    assert snap.sha256 == "abc123"
+    assert snap.path == "/snap/rhea"
+
+
+def test_snapshot_config_rejects_unknown_key() -> None:
+    data = _valid_config_dict()
+    data["data"] = {
+        "snapshots": {"rhea": {"version": "1", "sha256": "a", "path": "/x", "oops": 1}}
+    }
+    try:
+        Config(**data)
+    except pydantic.ValidationError:
+        return
+    raise AssertionError("SnapshotConfig should reject extra keys")
+
+
 # --- immutability ------------------------------------------------------------
 
 

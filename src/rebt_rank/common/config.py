@@ -24,12 +24,13 @@ import json
 from collections.abc import Mapping
 from typing import Any, Self
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, Field
 
 __all__ = [
     "Config",
     "PathsConfig",
     "SeedConfig",
+    "SnapshotConfig",
     "DataConfig",
     "BenchmarkConfig",
     "FeatureConfig",
@@ -72,8 +73,27 @@ class SeedConfig(_StrictModel):
     master: int
 
 
+class SnapshotConfig(_StrictModel):
+    """A single pinned data snapshot: its version, checksum, and location.
+
+    ``path`` is treated as an opaque location by M0b (``verify_snapshots``);
+    ROOT-relative resolution belongs to the later paths milestone (Part 5.2).
+    """
+
+    version: str
+    sha256: str
+    path: str
+
+
 class DataConfig(_StrictModel):
-    """Dataset snapshot configuration. Fields added by M0b when specified."""
+    """Dataset snapshot configuration (Part 5.1 ``data.yaml``).
+
+    Maps a source name (e.g. ``rhea``, ``brenda``, ``uniprot``) to its pinned
+    :class:`SnapshotConfig`. Empty by default; populated by ``data.yaml`` and
+    checked by ``m0_config.verify_snapshots`` (M0b).
+    """
+
+    snapshots: dict[str, SnapshotConfig] = Field(default_factory=dict)
 
 
 class BenchmarkConfig(_StrictModel):

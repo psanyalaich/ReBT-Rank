@@ -1,0 +1,6 @@
+# ReBT-Rank data-snapshot configuration (Engineering Design Part 5.1).
+#
+# Snapshot ids + checksums (rhea / brenda / uniprot: {version, sha256}) are added
+# at Task M0b, when the DataConfig schema is defined. DataConfig currently forbids
+# extra keys, so this layer stays empty until then.
+data: {}

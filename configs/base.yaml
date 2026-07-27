@@ -1,0 +1,22 @@
+# ReBT-Rank base configuration (Engineering Design Part 5.1).
+#
+# Provides a default for every field so experiment overlays need only declare
+# their deltas. Empty sub-config sections (paths/data/benchmark/calibration/eval)
+# are intentionally blank: their fields are added by the owning module when the
+# frozen design specifies them (paths -> path-resolution task; data -> M0b
+# snapshot schema; benchmark -> M1; calibration -> M5; eval -> M6).
+paths: {}
+seeds:
+  master: 42
+data: {}
+benchmark: {}
+features:
+  disabled_groups: []
+model:
+  objective: lambdarank
+  num_leaves: 63
+calibration: {}
+eval: {}
+experiment:
+  id: base
+  tags: []
